@@ -1,0 +1,114 @@
+<%- include('../partials/root.ejs') %>
+<%- include('../partials/nav.ejs') %>
+
+<!-- To list all applications -->
+
+<div class="page-wrapper">
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+              Overview
+            </div>
+            <h2 class="page-title">
+              Admissions
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <div class="card">
+          <div class="card-body">
+            <div id="table-default" class="table-responsive">
+              <table class="table card-table table-vcenter text-nowrap datatable">
+                <thead>
+                  <tr>
+                    <th>
+                      <button class="table-sort" data-sort="sort-id">
+                        ID
+                      </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-name">
+                        Name
+                    </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-class">
+                        Class
+                    </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-father">
+                        Father
+                    </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-mother">
+                        Mother
+                    </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-date">
+                        Date
+                      </button>
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="table-tbody">
+                  <% for (const application of applications) { %>
+                    <tr>
+                      <td class="sort-id">
+                        <%= application.slug %>
+                      </td>
+                      <td class="sort-name">
+                        <div class="d-flex py-1 align-items-center">
+                          <span class="avatar me-2" style="background-image: url('<%= application.student.image %>')"></span>
+                          <div class="flex-fill">
+                            <div class="font-weight-medium">
+                              <%= application.student.firstName + " " + application.student.lastName %>
+                            </div>
+                            <div class="text-muted">
+                              <%= application.student.gender %>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="sort-class">
+                        <%= application.for %>
+                      </td>
+                      <td class="sort-father">
+                        <div><%= application.father.name %></div>
+                        <div class="text-muted"><%= application.father.personalEmail %></div>
+                      </td>
+                      <td class="sort-mother">
+                        <div><%= application.mother.name %></div>
+                        <div class="text-muted"><%= application.mother.personalEmail %></div>
+                      </td>
+                      <td class="sort-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+                        <%= (application.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }); %>
+                      </td>
+                      <td class="text-end">
+                        <button class="btn align-text-top" data-bs-boundary="viewport">
+                          Download
+                        </button>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<%- include('../partials/footer.ejs') %>

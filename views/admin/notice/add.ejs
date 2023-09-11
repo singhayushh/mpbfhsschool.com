@@ -1,0 +1,123 @@
+<%- include('../partials/root.ejs') %>
+<%- include('../partials/nav.ejs') %>
+
+<div class="page-wrapper">
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+              Add
+            </div>
+            <h2 class="page-title">
+              New Notice
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <form action="/admin/notice" method="post" enctype="" id="main-form">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Add Details</h3>
+          </div>
+            <div class="card-body">
+              <div class="row row-cards">
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label class="form-label required">Title</label>
+                    <input type="text" value="" class="form-control" placeholder="Enter title..." name="title">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3">
+                    <label class="form-label">Description (optional)</label>
+                    <textarea id="tinymce-mytextarea" name="description" placeholder="Enter notice description here..."></textarea>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Add Attachment (optional)</label>
+                    <div class="input-icon mb-3">
+                      <input type="text" value="" class="form-control" placeholder="Paste URL…" name="attachment">
+                      <span class="input-icon-addon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                          <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                          <path d="M9 9l1 0"></path>
+                          <path d="M9 13l6 0"></path>
+                          <path d="M9 17l6 0"></path>
+                       </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label required">Publishing Date</label>
+                    <div class="input-icon">
+                      <input class="form-control" placeholder="Select a date" id="datepicker-icon-prepend" value="2023-06-20" name="date"/>
+                      <span class="input-icon-addon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-end">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+
+<script src="/admin/libs/litepicker/dist/litepicker.js?1684106062" defer></script>
+<script src="/admin/libs/tinymce/tinymce.min.js?1684106062" defer></script>
+<script>
+  // @formatter:off
+  document.addEventListener("DOMContentLoaded", function () {
+    window.Litepicker && (new Litepicker({
+      element: document.getElementById('datepicker-icon-prepend'),
+      buttonText: {
+        previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+        nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+      },
+    }));
+  });
+  // @formatter:on
+</script>
+<script>
+  // @formatter:off
+  document.addEventListener("DOMContentLoaded", function () {
+    let options = {
+      selector: '#tinymce-mytextarea',
+      height: 300,
+      menubar: false,
+      statusbar: false,
+      plugins: [],
+      toolbar: 'undo redo | formatselect | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat',
+      content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; }'
+    }
+    if (localStorage.getItem("tablerTheme") === 'dark') {
+      options.skin = 'oxide-dark';
+      options.content_css = 'dark';
+    }
+    tinyMCE.init(options);
+  })
+  // @formatter:on
+</script>
+
+<%- include('../partials/footer.ejs') %>

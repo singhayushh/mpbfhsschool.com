@@ -1,0 +1,99 @@
+<%- include('../partials/root.ejs') %>
+<%- include('../partials/nav.ejs') %>
+
+<div class="page-wrapper">
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+              Overview
+            </div>
+            <h2 class="page-title">
+              Blogs
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <div class="card">
+          <div class="card-body">
+            <div id="table-default" class="table-responsive">
+              <table class="table card-table table-vcenter text-nowrap datatable">
+                <thead>
+                  <tr>
+                    <th>
+                      <button class="table-sort" data-sort="sort-id">
+                        Title
+                      </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-name">
+                        Slug
+                    </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-class">
+                        Author
+                      </button>
+                    </th>
+                    <th>
+                      <button class="table-sort" data-sort="sort-date">
+                        Date
+                      </button>
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody class="table-tbody">
+                  <% for (const blog of blogs) { %>
+                    <tr>
+                      <td class="sort-id">
+                        <div class="d-flex py-1 align-items-center">
+                          <span class="avatar me-2" style="background-image: url('<%= blog.thumbnail %>')"></span>
+                          <div class="flex-fill">
+                            <div class="font-weight-medium">
+                              <%= blog.title %>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="sort-name">
+                        <%= blog.slug %>
+                      </td>
+                      <td class="sort-class">
+                        <%= blog.author ?? "-" %>
+                      </td>
+                      <td class="sort-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+                        <%= (blog.createdAt).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }); %>
+                      </td>
+                      <td class="text-end">
+                        <span class="dropdown">
+                          <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="/admin/blog/edit/<%= blog.slug %>">
+                              Edit
+                            </a>
+                            <a class="dropdown-item" href="/admin/blog/delete/<%= blog.slug %>">
+                              Delete
+                            </a>
+                          </div>
+                        </span>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<%- include('../partials/footer.ejs') %>

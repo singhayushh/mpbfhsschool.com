@@ -1,0 +1,157 @@
+<%- include('../partials/root.ejs') %>
+<%- include('../partials/nav.ejs') %>
+
+<link href="/admin/libs/dropzone/dist/dropzone.css?1684106062" rel="stylesheet"/>
+
+<div class="page-wrapper">
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+              Upload
+            </div>
+            <h2 class="page-title">
+              New Media
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <form action="/admin/asset" method="post" enctype="" id="main-form">
+        <div class="row row-deck row-cards">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">Multiple File Upload</h3>
+                <div class="dropzone" id="dropzone-multiple">
+                  <div class="fallback">
+                    <input name="file" type="file"  multiple  />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="row row-cards">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h3 class="card-title">Image Details</h3>
+                    <div class="row row-cards">
+                      <div class="col">
+                        <div class="mb-3">
+                          <label class="form-label">Choose / Create Gallery</label>
+                          <select type="text" class="form-select" placeholder="Choose gallery" id="select-gallery" name="gallery" value="">
+                            <option value="Public">Public</option>
+                            <% for (const gallery of galleries) { %>
+                              <option value="<%= gallery %>"><%= gallery %></option>
+                            <% } %>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+
+<script src="/admin/libs/dropzone/dist/dropzone-min.js?1684106062" defer></script>
+<script src="/admin/libs/tom-select/dist/js/tom-select.base.min.js?1684106062" defer></script>
+<script>
+  // @formatter:off
+  document.addEventListener("DOMContentLoaded", function () {
+    var el;
+    window.TomSelect && (new TomSelect(el = document.getElementById('select-gallery'), {
+      create: true,
+      copyClassesToDropdown: false,
+      dropdownParent: 'body',
+      controlInput: '<input>',
+      render:{
+        item: function(data,escape) {
+          if( data.customProperties ){
+            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+          }
+          return '<div>' + escape(data.text) + '</div>';
+        },
+        option: function(data,escape){
+          if( data.customProperties ){
+            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+          }
+          return '<div>' + escape(data.text) + '</div>';
+        },
+      },
+    }));
+  });
+  // @formatter:on
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    Dropzone.autoDiscover = false;
+
+    const dropzones = [];
+    const dropzoneElements = document.querySelectorAll(".dropzone");
+    dropzoneElements.forEach(function (el) {
+        const myDropzone = new Dropzone(el, {
+            url: "/admin/asset",
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 100,
+            maxFiles: 100,
+            paramName: "files",
+            addRemoveLinks: true,
+        });
+        dropzones.push(myDropzone);
+    });
+
+    document.querySelector("button[type=submit]").addEventListener("click", function (e) {
+        // Make sure that the form isn't actually being sent.
+        e.preventDefault();
+        e.stopPropagation();
+        const form = new FormData(document.querySelector("form"));
+
+        dropzones.forEach(function (dropzone) {
+            const { paramName } = dropzone.options;
+            dropzone.files.forEach(function (file, i) {
+                form.append(paramName, file);
+            });
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/admin/asset");
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                window.location = response.path;
+            }
+        };
+        xhr.send(form);
+    });
+
+    document.addEventListener("ajaxStart", function () {
+        // Show image container
+        document.querySelector("#loader").style.visibility = "visible";
+        document.querySelector("#main-form").style.display = "none";
+    });
+
+    document.addEventListener("ajaxComplete", function () {
+        document.querySelector("#loader").style.display = "none";
+    });
+});
+
+</script>
+
+<%- include('../partials/footer.ejs') %>
